@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "CommonJS", // Change this to CommonJS for Node.js compatibility
+    "skipLibCheck": true,
+
+    /* Node.js mode */
+    "moduleResolution": "node", // Ensure this is node for Node.js environment
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+
+  "ts-node": {
+    "compiler": "typescript"
+  }
+}
