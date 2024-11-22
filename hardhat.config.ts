@@ -46,8 +46,8 @@ if (!mnemonic) {
 const chainIds = {
   tmp: 15,
   zama: 8009,
-  local: 38115023525,
-  localNetwork1: 9000,
+  local: 9000,
+  localNetwork1: 87288123074,
   multipleValidatorTestnet: 8009,
 };
 
@@ -55,7 +55,7 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
   let jsonRpcUrl: string;
   switch (chain) {
     case "local":
-      jsonRpcUrl = "http://3.14.246.176:8449";
+      jsonRpcUrl = "http://46.101.206.70:8449";
       break;
     case "tmp":
       jsonRpcUrl = "http://127.0.0.1:8545";
@@ -71,7 +71,7 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
       break;
   }
   return {
-    accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+    accounts: process.env.PRIVATE_KEY && process.env.USER_PRIVATE_KEY ? [process.env.PRIVATE_KEY, process.env.USER_PRIVATE_KEY] : [],
     chainId: chainIds[chain],
     url: jsonRpcUrl,
   };
@@ -84,9 +84,7 @@ task("coverage").setAction(async (taskArgs, hre, runSuper) => {
 });
 
 task("test", async (taskArgs, hre, runSuper) => {
-  // Run modified test task
   if (hre.network.name === "hardhat") {
-    // in fhevm mode all this block is done when launching the node via `pnmp fhevm:start`
     await hre.run("compile:specific", { contract: "contracts" });
     const sourceDir = path.resolve(__dirname, "node_modules/fhevm/");
     const destinationDir = path.resolve(__dirname, "fhevmTemp/");

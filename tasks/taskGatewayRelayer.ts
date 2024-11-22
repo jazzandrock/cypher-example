@@ -25,53 +25,55 @@ task("task:computePredeployAddress")
       nonce: nonce + 3, // deployer is supposed to have nonce 0 when deploying GatewayContract
     });
 
-    console.log(gatewayContractAddressPrecomputed);
-    //     const envFilePath = path.join(__dirname, "../node_modules/fhevm/gateway/.env.gateway");
-    //     const content = `GATEWAY_CONTRACT_PREDEPLOY_ADDRESS=${gatewayContractAddressPrecomputed}\n`;
-    //     try {
-    //       fs.writeFileSync(envFilePath, content, { flag: "w" });
-    //       console.log("gatewayContractAddress written to gateway/.env.gateway successfully!");
-    //     } catch (err) {
-    //       console.error("Failed to write to node_modules/fhevm/gateway/.env.gateway:", err);
-    //     }
+    console.log(`GatewayContract address: ${gatewayContractAddressPrecomputed}`);
+    // const envFilePath = path.join(__dirname, "../node_modules/fhevm/gateway/.env.gateway");
+    // const content = `GATEWAY_CONTRACT_PREDEPLOY_ADDRESS=${gatewayContractAddressPrecomputed}\n`;
+    // try {
+    //   fs.writeFileSync(envFilePath, content, { flag: "w" });
+    //   console.log("gatewayContractAddress written to gateway/.env.gateway successfully!");
+    // } catch (err) {
+    //   console.error("Failed to write to node_modules/fhevm/gateway/.env.gateway:", err);
+    // }
 
-    //     const solidityTemplate = `// SPDX-License-Identifier: BSD-3-Clause-Clear
+    // const solidityTemplate = `// SPDX-License-Identifier: BSD-3-Clause-Clear
 
     // pragma solidity ^0.8.24;
 
     // address constant GATEWAY_CONTRACT_PREDEPLOY_ADDRESS = ${gatewayContractAddressPrecomputed};
     //         `;
 
-    //     try {
-    //       fs.writeFileSync("./node_modules/fhevm/gateway/lib/PredeployAddress.sol", solidityTemplate, {
-    //         encoding: "utf8",
-    //         flag: "w",
-    //       });
-    //       console.log("node_modules/fhevm/gateway/lib/PredeployAddress.sol file has been generated successfully.");
-    //     } catch (error) {
-    //       console.error("Failed to write node_modules/fhevm/gateway/lib/PredeployAddress.sol", error);
-    //     }
+    // try {
+    //   fs.writeFileSync("./node_modules/fhevm/gateway/lib/PredeployAddress.sol", solidityTemplate, {
+    //     encoding: "utf8",
+    //     flag: "w",
+    //   });
+    //   console.log("node_modules/fhevm/gateway/lib/PredeployAddress.sol file has been generated successfully.");
+    // } catch (error) {
+    //   console.error("Failed to write node_modules/fhevm/gateway/lib/PredeployAddress.sol", error);
+    // }
   });
 
 task("task:addRelayer")
-  .addParam("privateKey", "The owner private key")
-  .addParam("gatewayAddress", "The GatewayContract address")
-  .addParam("relayerAddress", "The relayer address")
+  .addParam("privatekey", "The owner private key")
+  .addParam("gatewayaddress", "The GatewayContract address")
+  .addParam("relayeraddress", "The relayer address")
   .setAction(async function (taskArguments: TaskArguments, { ethers }) {
-    const codeAtAddress = await ethers.provider.getCode(taskArguments.gatewayAddress);
+
+
+    const codeAtAddress = await ethers.provider.getCode(taskArguments.gatewayaddress);
     if (codeAtAddress === "0x") {
-      throw Error(`${taskArguments.gatewayAddress} is not a smart contract`);
+      throw Error(`${taskArguments.gatewayaddress} is not a smart contract`);
     }
-    const owner = new ethers.Wallet(taskArguments.privateKey).connect(ethers.provider);
+    const owner = new ethers.Wallet(taskArguments.privatekey).connect(ethers.provider);
     const gateway = await ethers.getContractAt(
-      "fhevm/gateway/GatewayContract.sol:GatewayContract",
-      taskArguments.gatewayAddress,
+      "GatewayContract",
+      taskArguments.gatewayaddress,
       owner,
     );
-    const tx = await gateway.addRelayer(taskArguments.relayerAddress);
+    const tx = await gateway.addRelayer(taskArguments.relayeraddress);
     const rcpt = await tx.wait();
     if (rcpt!.status === 1) {
-      console.log(`Account ${taskArguments.relayerAddress} was succesfully added as an gateway relayer`);
+      console.log(`Account ${taskArguments.relayeraddress} was succesfully added as an gateway relayer`);
     } else {
       console.log("Adding relayer failed");
     }

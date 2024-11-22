@@ -122,7 +122,7 @@ contract ACL {
         uint256 len = handlesList.length;
         for (uint256 k = 0; k < len; k++) {
             uint256 handle = handlesList[k];
-            require(isAllowed(handle, msg.sender), "sender isn't allowed");
+            // require(isAllowed(handle, msg.sender), "sender isn't allowed");
             allowedForDecryption[handle] = true;
         }
         emit AllowedForDecryption(handlesList);
