@@ -88,6 +88,8 @@
     "test:mock": "hardhat test --network hardhat",
     "coverage:mock": "hardhat coverage",
     "task:getEthereumAddress": "hardhat task:getEthereumAddress",
+    "task:deployDAO": "hardhat task:deployDAO",
+    "task:deployDAOToken": "hardhat task:deployDAOToken",
     "task:deployERC20": "hardhat task:deployERC20",
     "task:accounts": "hardhat task:accounts",
     "fhevm:start": "make run-full && ./scripts/fund_test_addresses_docker.sh && ./launch-fhevm.sh",

@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 import * as fs from "fs";
 import * as path from "path";
 
-import { EncryptedERC20__factory, EncryptedAuction__factory, EncryptedPool__factory, TestToken__factory } from "../types";
+import { EncryptedERC20__factory, EncryptedAuction__factory, EncryptedPool__factory, TestToken__factory, EncryptedVoteDAO__factory } from "../types";
 
 dotenv.config();
 
@@ -23,6 +23,59 @@ function writeConfig(key: string, value: string) {
   config[key] = value;
   fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2), "utf-8");
 }
+
+task("task:voteDAO").setAction(async function (taskArguments: TaskArguments, { ethers }) {
+  const daoToken = readConfig().DAO_TOKEN;
+  const signers = await ethers.getSigners();
+
+  const daoAddr = readConfig().DAO_ADDR;
+
+  const daoContract = EncryptedVoteDAO__factory.connect(daoAddr, signers[0]);
+
+  let tx;
+  tx = await daoContract.createProposal("well dorow");
+  await tx.wait();
+  
+  
+  // tx = await daoContract.vote
+
+  const daoFactory = await ethers.getContractFactory("EncryptedVoteDAO");
+  const dao = await daoFactory.connect(signers[0]).deploy(daoToken);
+  await dao.waitForDeployment();
+
+  const daoAddress = await dao.getAddress();
+  console.log("DAO deployed to: ", daoAddress);
+
+  writeConfig("DAO_ADDR", daoAddress);
+});
+
+task("task:deployDAO").setAction(async function (taskArguments: TaskArguments, { ethers }) {
+  const daoToken = readConfig().DAO_TOKEN;
+  const signers = await ethers.getSigners();
+
+
+  const daoFactory = await ethers.getContractFactory("EncryptedVoteDAO");
+  const dao = await daoFactory.connect(signers[0]).deploy(daoToken);
+  await dao.waitForDeployment();
+
+  const daoAddress = await dao.getAddress();
+  console.log("DAO deployed to: ", daoAddress);
+
+  writeConfig("DAO_ADDR", daoAddress);
+});
+
+
+task("task:deployDAOToken").setAction(async function (taskArguments: TaskArguments, { ethers }) {
+  const signers = await ethers.getSigners();
+  const erc20Factory = await ethers.getContractFactory("DaoToken");
+  const ERC20 = await erc20Factory.connect(signers[0]).deploy(ethers.parseEther("1000000"), "Sergio Prog Top Token Ever", "SRGPRG");
+  await ERC20.waitForDeployment();
+
+  const tokenAddress = await ERC20.getAddress();
+  console.log("DAO TOKEN deployed to: ", tokenAddress);
+
+  writeConfig("DAO_TOKEN", tokenAddress);
+});
 
 task("task:deployERC20").setAction(async function (taskArguments: TaskArguments, { ethers }) {
   const signers = await ethers.getSigners();
