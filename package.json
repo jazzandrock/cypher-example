@@ -88,6 +88,7 @@
     "test:mock": "hardhat test --network hardhat",
     "coverage:mock": "hardhat coverage",
     "task:getEthereumAddress": "hardhat task:getEthereumAddress",
+    "task:voteDAO": "hardhat task:voteDAO",
     "task:deployDAO": "hardhat task:deployDAO",
     "task:deployDAOToken": "hardhat task:deployDAOToken",
     "task:deployERC20": "hardhat task:deployERC20",

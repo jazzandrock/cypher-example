@@ -34,19 +34,29 @@ task("task:voteDAO").setAction(async function (taskArguments: TaskArguments, { e
 
   let tx;
   tx = await daoContract.createProposal("well dorow");
+  console.log(tx.hash);
   await tx.wait();
   
-  
-  // tx = await daoContract.vote
+  const instance = await createInstance({
+    networkUrl: process.env.NETWORK_URL || "",
+    gatewayUrl: process.env.GATEWAY_URL || "",
+  });
 
-  const daoFactory = await ethers.getContractFactory("EncryptedVoteDAO");
-  const dao = await daoFactory.connect(signers[0]).deploy(daoToken);
-  await dao.waitForDeployment();
+  const vote = 1;
+  const input = await instance.createEncryptedInput(readConfig().DAO_ADDR, signers[0].address);
 
-  const daoAddress = await dao.getAddress();
-  console.log("DAO deployed to: ", daoAddress);
+  await input.add32(vote);
 
-  writeConfig("DAO_ADDR", daoAddress);
+  const inputs = await input.encrypt();
+
+  // tx = await daoContract.vote(
+  //   3,
+  //   inputs.handles[0],
+  //   inputs.inputProof,
+  //   { gasLimit: 2000000, nonce:  }
+  // );
+  // console.log(tx.hash);
+  // await tx.wait();
 });
 
 task("task:deployDAO").setAction(async function (taskArguments: TaskArguments, { ethers }) {
