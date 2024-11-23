@@ -11,6 +11,12 @@ importers:
       extra-bigint:
         specifier: ^1.1.18
         version: 1.1.18
+      fhevmjs:
+        specifier: 0.5.2
+        version: 0.5.2(encoding@0.1.13)
+      node-tfhe:
+        specifier: ^0.10.0
+        version: 0.10.0
       sqlite3:
         specifier: ^5.1.7
         version: 5.1.7
@@ -87,9 +93,6 @@ importers:
       fhevm:
         specifier: ^0.5.8
         version: 0.5.8
-      fhevmjs:
-        specifier: ^0.5.2
-        version: 0.5.2(encoding@0.1.13)
       fs-extra:
         specifier: ^10.1.0
         version: 10.1.0
@@ -2207,6 +2210,9 @@ packages:
   node-interval-tree@2.1.2:
     resolution: {integrity: sha512-bJ9zMDuNGzVQg1xv0bCPzyEDxHgbrx7/xGj6CDokvizZZmastPsOh0JJLuY8wA5q2SfX1TLNMk7XNV8WxbGxzA==}
     engines: {node: '>= 14.0.0'}
+
+  node-tfhe@0.10.0:
+    resolution: {integrity: sha512-XDZnj69hideRx4LtYQP8/oiCkB0s0nCqO1l+eBCYSlyqyUCRTHlWMWSDnNIeaDdgNc1j7UjuynFnbtWUjLJSGw==}
 
   node-tfhe@0.6.4:
     resolution: {integrity: sha512-V/SJjc5GPKIB/KcNGEFSDDQelIKvFIFiCgefeDARgxOnN69fyB+omV4e4j3tMDEz6aN7xRd/NqqQ0im17emXeA==}
@@ -5739,6 +5745,8 @@ snapshots:
   node-interval-tree@2.1.2:
     dependencies:
       shallowequal: 1.1.0
+
+  node-tfhe@0.10.0: {}
 
   node-tfhe@0.6.4: {}
 
